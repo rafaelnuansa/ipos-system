@@ -10,10 +10,10 @@
 		}
 		.header{
 			background-color: #d3eafc;
-			padding: 60px 90px;
+			padding: 60px 20px;
 		}
 		.body{
-			padding: 40px 90px;
+			padding: 20px 20px;
 		}
 		/* Text */
 		.text-20{
@@ -129,14 +129,12 @@
 	<div class="header">
 		<table class="w-100">
 			<tr>
-				<td class="img-td text-left"><img src="{{ asset('icons/logo-mini2.png') }}"></td>
 				<td class="text-left">
+
+					<p class="text-15 txt-blue font-bold">LAPORAN PEMASUKAN</p>
 					<p class="text-12 txt-dark d-block mb-1">{{ $market->nama_toko }}</p>
 					<p class="text-10 txt-dark d-block">{{ $market->alamat }}</p>
 					<p class="text-10 txt-dark d-block">{{ $market->no_telp }}</p>
-				</td>
-				<td class="text-right">
-					<p class="text-20 txt-blue font-bold">LAPORAN PEMASUKAN</p>
 				</td>
 			</tr>
 			<tr>
@@ -157,45 +155,79 @@
 		<ul>
 			@php
 			$pemasukan = 0;
+			$totalLaba = 0;
+			$totalModal = 0;
 			@endphp
 			@foreach($dates as $date)
 			<li class="text-10 txt-light mt-2">{{ date('d M, Y', strtotime($date)) }}</li>
-			@php
-			$transactions = \App\Transaction::whereDate('transactions.created_at', $date)
-			->select('transactions.*')
-			->latest()
-			->get();
-			@endphp
+            @php
+            $transactions = \App\Transaction::select('kode_transaksi')
+            ->whereDate('transactions.created_at', $date)
+            ->distinct()
+            ->latest()
+            ->get();
+            @endphp
 			<table class="w-100 mb-4">
 				<thead>
 					<tr>
-						<td colspan="5"></td>
+						<td colspan="6"></td>
 					</tr>
 				</thead>
 				<tbody>
 					@foreach($transactions as $transaction)
+
+                    @php
+                    $transaksi = \App\Transaction::where('kode_transaksi', $transaction->kode_transaksi)
+                    ->select('transactions.*')
+                    ->first();
+                    $products = \App\Transaction::where('kode_transaksi', $transaction->kode_transaksi)
+                    ->select('transactions.*')
+                    ->get();
+                    $tgl_transaksi = \App\Transaction::where('kode_transaksi', '=' , $transaction->kode_transaksi)
+                    ->select('created_at')
+                    ->first();
+                    $modal = \App\Transaction::where('kode_transaksi', $transaction->kode_transaksi)
+                    ->sum('modal');
+
+                    $laba = \App\Transaction::where('kode_transaksi', $transaction->kode_transaksi)
+                    ->sum('laba');
+                    @endphp
 					<tr>
 						<td>
-							<span class="text-12 txt-dark2 d-block">{{ $transaction->kode_transaksi }}</span>
-							<span class="text-10 txt-light d-block">Waktu : {{ date('H:i', strtotime($transaction->created_at)) }}</span>
-						</td>
+							<span class="text-10 txt-dark2 d-block">{{ $transaksi->kode_transaksi }}</span>
+							<span class="text-10 txt-light d-block">Waktu : {{ date('H:i', strtotime($transaksi->created_at)) }}</span>
+							<span class="text-10 txt-light d-block" style="text-transform: uppercase">{{ $transaksi->manual_transaksi }}</span>
+                        </td>
 						<td>
 							<span class="text-10 txt-light d-block">Total</span>
-							<span class="txt-green text-12 d-block">Rp. {{ number_format($transaction->total,2,',','.') }}</span>
+							<span class="txt-green text-12 d-block">Rp. {{ number_format($transaksi->total,2,',','.') }}</span>
 						</td>
 						@php
-						$pemasukan += $transaction->total;
+
+                        $jmlPemasukan =  \App\Transaction::where('kode_transaksi', $transaksi->kode_transaksi)
+                        ->select('transactions.*')
+                        ->first();
+                        $pemasukan += $transaksi->subtotal;
+                        $totalLaba += $laba;
+                        $totalModal += $modal;
 						@endphp
 						<td>
 							<span class="text-10 txt-light d-block">Bayar</span>
-							<span class="txt-dark2 text-12 d-block">Rp. {{ number_format($transaction->bayar,2,',','.') }}</span>
+							<span class="txt-dark2 text-12 d-block">Rp. {{ number_format($transaksi->bayar,2,',','.') }}</span>
 						</td>
 						<td>
 							<span class="text-10 txt-light d-block">Kembali</span>
-							<span class="txt-dark text-12 d-block">Rp. {{ number_format($transaction->kembali,2,',','.') }}</span>
+							<span class="txt-dark text-12 d-block">Rp. {{ number_format($transaksi->kembali,2,',','.') }}</span>
 						</td>
+
 						<td>
-							<span class="txt-dark2 text-12 d-block">{{ $transaction->kasir }}</span>
+							<span class="text-10 txt-light d-block">Modal</span>
+							<span class="txt-dark text-12 d-block">Rp. {{ number_format($modal,2,',','.') }}</span>
+						</td>
+
+						<td>
+							<span class="text-10 txt-light d-block">Laba</span>
+							<span class="txt-dark text-12 d-block">Rp. {{ number_format($laba,2,',','.') }}</span>
 						</td>
 					</tr>
 					@endforeach
@@ -210,8 +242,12 @@
 				</tr>
 				<tr>
 					<td class="text-14 pt-15 text-right">
-						<span class="mr-20">PEMASUKAN</span>
-						<span class="txt-blue font-bold">Rp. {{ number_format($pemasukan,2,',','.') }}</span>
+						<span class="text-12 mr-5">Pemasukan : </span>
+						<span class="txt-blue font-bold text-12">Rp. {{ number_format($pemasukan,2,',','.') }}</span><br>
+						<span class="text-12 mr-5">Total Modal : </span>
+						<span class="txt-blue font-bold text-12">Rp. {{ number_format($totalModal,2,',','.') }}</span><br>
+						<span class="text-12 mr-5">Total Laba : </span>
+						<span class="txt-blue font-bold text-12">Rp. {{ number_format($totalLaba,2,',','.') }}</span><br>
 					</td>
 				</tr>
 			</tfoot>

@@ -79,29 +79,21 @@ class ProductManageController extends Controller
         	{
         		$product = new Product;
     	    	$product->kode_barang = $req->kode_barang;
-    	    	$product->jenis_barang = $req->jenis_barang;
     	    	$product->nama_barang = $req->nama_barang;
-    	    	if($req->berat_barang != '')
-    	    	{
-    	    		$product->berat_barang = $req->berat_barang . ' ' . $req->satuan_berat;
-    	    	}
-    	    	if($req->merek != '')
-    	    	{
-    	    		$product->merek = $req->merek;
-    	    	}
                 if($supply_system->status == true){
                     $product->stok = $req->stok;
                 }else{
                     $product->stok = 1;
                 }
     	    	$product->harga = $req->harga;
+    	    	$product->modal = $req->modal;
     	    	$product->save();
 
-    	    	Session::flash('create_success', 'Barang baru berhasil ditambahkan');
+    	    	Session::flash('create_success', 'Produk baru berhasil ditambahkan');
 
     		    return redirect('/product');
         	}else{
-        		Session::flash('create_failed', 'Kode barang telah digunakan');
+        		Session::flash('create_failed', 'Kode Produk telah digunakan');
 
     		    return back();
         	}
@@ -123,7 +115,7 @@ class ProductManageController extends Controller
     			$file->move('excel_file', $nama_file);
     			Excel::import(new ProductImport, public_path('/excel_file/'.$nama_file));
 
-    			Session::flash('import_success', 'Data barang berhasil diimport');
+    			Session::flash('import_success', 'Data produk berhasil diimport');
         	}catch(\Exception $ex){
         		Session::flash('import_failed', 'Cek kembali terdapat data kosong atau kode barang yang telah tersedia');
 
@@ -144,7 +136,6 @@ class ProductManageController extends Controller
         ->first();
         if($check_access->kelola_barang == 1){
             $product = Product::find($id);
-
             return response()->json(['product' => $product]);
         }else{
             return back();
@@ -166,11 +157,9 @@ class ProductManageController extends Controller
                 $product = Product::find($req->id);
                 $kode_barang = $product->kode_barang;
                 $product->kode_barang = $req->kode_barang;
-                $product->jenis_barang = $req->jenis_barang;
                 $product->nama_barang = $req->nama_barang;
-                $product->berat_barang = $req->berat_barang . ' ' . $req->satuan_berat;
-                $product->merek = $req->merek;
                 $product->stok = $req->stok;
+                $product->modal = $req->modal;
                 $product->harga = $req->harga;
                 if($req->stok <= 0)
                 {
@@ -185,11 +174,11 @@ class ProductManageController extends Controller
                 Transaction::where('kode_barang', $kode_barang)
                 ->update(['kode_barang' => $req->kode_barang]);
 
-                Session::flash('update_success', 'Data barang berhasil diubah');
+                Session::flash('update_success', 'Data produk berhasil diubah');
 
                 return redirect('/product');
             }else{
-                Session::flash('update_failed', 'Kode barang telah digunakan');
+                Session::flash('update_failed', 'Kode produk telah digunakan');
 
                 return back();
             }
@@ -207,7 +196,7 @@ class ProductManageController extends Controller
         if($check_access->kelola_barang == 1){
             Product::destroy($id);
 
-            Session::flash('delete_success', 'Barang berhasil dihapus');
+            Session::flash('delete_success', 'Produk berhasil dihapus');
 
             return back();
         }else{

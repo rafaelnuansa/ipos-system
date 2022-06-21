@@ -6,7 +6,7 @@
 <div class="row page-title-header">
   <div class="col-12">
     <div class="page-header d-flex justify-content-between align-items-center">
-      <h4 class="page-title">Riwayat Pasok</h4>
+      <h4 class="page-title">Riwayat Supply Produksi</h4>
       <div class="d-flex justify-content-start">
         <a href="{{ url('/supply/statistics') }}" class="btn btn-icons btn-inverse-primary btn-filter shadow-sm ml-2">
           <i class="mdi mdi-poll"></i>

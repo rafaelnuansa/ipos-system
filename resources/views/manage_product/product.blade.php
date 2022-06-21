@@ -23,7 +23,7 @@
             @if($supply_system->status == true)
             <a href="#" class="dropdown-item filter-btn" data-filter="stok">Stok Barang</a>
             @endif
-            <a href="#" class="dropdown-item filter-btn" data-filter="harga">Harga Barang</a>
+            <a href="#" class="dropdown-item filter-btn" data-filter="harga">Harga Jual</a>
 	        </div>
 	      </div>
         <div class="dropdown dropdown-search">
@@ -51,7 +51,7 @@
       <div class="modal-content">
         <form action="{{ url('/product/update') }}" method="post" name="update_form">
           <div class="modal-header">
-            <h5 class="modal-title" id="editModalLabel">Edit Barang</h5>
+            <h5 class="modal-title" id="editModalLabel">Edit Produk</h5>
             <button type="button" class="close close-btn" data-dismiss="modal" aria-label="Close">
               <span aria-hidden="true">&times;</span>
             </button>
@@ -64,7 +64,7 @@
                 </div>
               </div>
               <div class="form-group row">
-                <label class="col-lg-3 col-md-3 col-sm-12 col-form-label font-weight-bold">Kode Barang</label>
+                <label class="col-lg-3 col-md-3 col-sm-12 col-form-label font-weight-bold">Kode Produk</label>
                 <div class="col-lg-7 col-md-7 col-sm-10 col-10">
                   <input type="text" class="form-control" name="kode_barang">
                 </div>
@@ -74,54 +74,34 @@
                 <div class="col-lg-9 col-md-9 col-sm-12 offset-lg-3 offset-md-3 error-notice" id="kode_barang_error"></div>
               </div>
               <div class="form-group row">
-                <label class="col-lg-3 col-md-3 col-sm-12 col-form-label font-weight-bold">Jenis Barang</label>
-                <div class="col-lg-9 col-md-9 col-sm-12">
-                  <select class="form-control" name="jenis_barang">
-                    <option value="Produksi">Produksi</option>
-                    <option value="Konsumsi">Konsumsi</option>
-                  </select>
-                </div>
-              </div>
-              <div class="form-group row">
-                <label class="col-lg-3 col-md-3 col-sm-12 col-form-label font-weight-bold">Nama Barang</label>
+                <label class="col-lg-3 col-md-3 col-sm-12 col-form-label font-weight-bold">Nama Produk</label>
                 <div class="col-lg-9 col-md-9 col-sm-12">
                   <input type="text" class="form-control" name="nama_barang">
                 </div>
                 <div class="col-lg-9 col-md-9 col-sm-12 offset-lg-3 offset-md-3 error-notice" id="nama_barang_error"></div>
               </div>
-              <div class="form-group row">
-                <label class="col-lg-3 col-md-3 col-sm-12 col-form-label font-weight-bold">Berat Barang</label>
-                <div class="col-lg-9 col-md-9 col-sm-12">
-                  <div class="input-group">
-                      <input type="text" class="form-control number-input input-notzero" name="berat_barang">
-                      <div class="input-group-append">
-                        <select class="form-control" name="satuan_berat">
-                          <option value="kg">Kilogram</option>
-                          <option value="g">Gram</option>
-                          <option value="ml">Miligram</option>
-                          <option value="oz">Ons</option>
-                          <option value="l">Liter</option>
-                          <option value="ml">Mililiter</option>
-                        </select>
-                      </div>
-                    </div>
-                </div>
-              </div>
-              <div class="form-group row">
-                <label class="col-lg-3 col-md-3 col-sm-12 col-form-label font-weight-bold">Merek Barang</label>
-                <div class="col-lg-9 col-md-9 col-sm-12">
-                  <input type="text" class="form-control" name="merek">
-                </div>
-              </div>
               <div class="form-group row" @if($supply_system->status == false) hidden="" @endif>
-                <label class="col-lg-3 col-md-3 col-sm-12 col-form-label font-weight-bold">Stok Barang</label>
+                <label class="col-lg-3 col-md-3 col-sm-12 col-form-label font-weight-bold">Stok Produk</label>
                 <div class="col-lg-9 col-md-9 col-sm-12">
-                  <input type="text" class="form-control number-input" name="stok">
+                  <input type="text" class="form-control" name="stok">
                 </div>
                 <div class="col-lg-9 col-md-9 col-sm-12 offset-lg-3 offset-md-3 error-notice" id="stok_error"></div>
               </div>
+              
               <div class="form-group row">
-                <label class="col-lg-3 col-md-3 col-sm-12 col-form-label font-weight-bold">Harga Barang</label>
+                <label class="col-lg-3 col-md-3 col-sm-12 col-form-label font-weight-bold">Modal Produk</label>
+                <div class="col-lg-9 col-md-9 col-sm-12">
+                  <div class="input-group">
+                      <div class="input-group-prepend">
+                        <span class="input-group-text">Rp. </span>
+                      </div>
+                      <input type="text" class="form-control number-input input-notzero" name="modal">
+                  </div>
+                </div>
+                <div class="col-lg-9 col-md-9 col-sm-12 offset-lg-3 offset-md-3 error-notice" id="modal_error"></div>
+              </div>
+              <div class="form-group row">
+                <label class="col-lg-3 col-md-3 col-sm-12 col-form-label font-weight-bold">Harga Produk</label>
                 <div class="col-lg-9 col-md-9 col-sm-12">
                   <div class="input-group">
                       <div class="input-group-prepend">
@@ -132,6 +112,7 @@
                 </div>
                 <div class="col-lg-9 col-md-9 col-sm-12 offset-lg-3 offset-md-3 error-notice" id="harga_error"></div>
               </div>
+              
           </div>
           <div class="modal-body" id="scan-modal-body" hidden="">
             <div class="row">
@@ -182,12 +163,13 @@
               <thead>
                 <tr>
                   <th>Barang</th>
-                  <th>Jenis</th>
-                  <th>Berat</th>
-                  <th>Merk</th>
+                  <!-- <th>Jenis</th> -->
+                  <!-- <th>Berat</th> -->
+                  <!-- <th>Merk</th> -->
                   @if($supply_system->status == true)
                   <th>Stok</th>
                   @endif
+                  <th>Modal</th>
                   <th>Harga</th>
                   <th>Keterangan</th>
                   <th></th>
@@ -200,12 +182,14 @@
                     <span class="kd-barang-field">{{ $product->kode_barang }}</span><br><br>
                     <span class="nama-barang-field">{{ $product->nama_barang }}</span>
                   </td>
-                  <td>{{ $product->jenis_barang }}</td>
+                  <!-- <td>{{ $product->jenis_barang }}</td>
                   <td>{{ $product->berat_barang }}</td>
-                  <td>{{ $product->merek }}</td>
+                  <td>{{ $product->merek }}</td> -->
                   @if($supply_system->status == true)
                   <td><span class="ammount-box bg-secondary"><i class="mdi mdi-cube-outline"></i></span>{{ $product->stok }}</td>
                   @endif
+                  
+                  <td><span class="ammount-box bg-green"><i class="mdi mdi-coin"></i></span>Rp. {{ number_format($product->modal,2,',','.') }}</td>
                   <td><span class="ammount-box bg-green"><i class="mdi mdi-coin"></i></span>Rp. {{ number_format($product->harga,2,',','.') }}</td>
                   @if($supply_system->status == true)
                   <td>
@@ -310,13 +294,9 @@
         $('input[name=id]').val(response.product.id);
         $('input[name=kode_barang]').val(response.product.kode_barang);
         $('input[name=nama_barang]').val(response.product.nama_barang);
-        $('input[name=merek]').val(response.product.merek);
         $('input[name=stok]').val(response.product.stok);
+        $('input[name=modal]').val(response.product.modal);
         $('input[name=harga]').val(response.product.harga);
-        var berat_barang = response.product.berat_barang.split(" ");
-        $('input[name=berat_barang]').val(berat_barang[0]);
-        $('select[name=jenis_barang] option[value="'+ response.product.jenis_barang +'"]').prop('selected', true);
-        $('select[name=satuan_berat] option[value="'+ berat_barang[1] +'"]').prop('selected', true);
         validator.resetForm();
       }
     });
@@ -327,7 +307,7 @@
     var data_delete = $(this).attr('data-delete');
     swal({
       title: "Apa Anda Yakin?",
-      text: "Data barang akan terhapus, klik oke untuk melanjutkan",
+      text: "Data produk akan terhapus, klik oke untuk melanjutkan",
       icon: "warning",
       buttons: true,
       dangerMode: true,

@@ -96,7 +96,7 @@
                 </form>
                 @endif
               </div>
-              <p class="mt-3 footer-text text-center">copyright © 2018 Bootstrapdash. All rights reserved.</p>
+              <p class="mt-3 footer-text text-center">© 2022 Womenshoes. All rights reserved.</p>
             </div>
           </div>
         </div>

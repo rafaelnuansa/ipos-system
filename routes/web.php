@@ -85,6 +85,10 @@ Route::group(['middleware' => ['auth', 'checkRole:admin,kasir']], function(){
 	Route::get('/report/workers/filter/{id}', 'ReportManageController@filterWorker');
 	Route::get('/report/workers/detail/{id}', 'ReportManageController@detailWorker');
 	Route::post('/report/workers/export/{id}', 'ReportManageController@exportWorker');
+	Route::get('/report/product', 'ReportManageController@reportProduct');
+	Route::post('/report/product/filter', 'ReportManageController@filterProduct');
+	Route::post('/report/product/export', 'ReportManageController@exportProduct');
+
 });
 
 // Auth::routes();

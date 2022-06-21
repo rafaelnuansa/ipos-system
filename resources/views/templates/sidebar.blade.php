@@ -57,10 +57,10 @@
     <div class="collapse" id="kelola_barang">
       <ul class="nav flex-column sub-menu">
         <li class="nav-item">
-          <a class="nav-link" href="{{ url('/product') }}">Daftar Barang</a>
+          <a class="nav-link" href="{{ url('/product') }}">Semua Produk</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="{{ url('/supply') }}">Pasok Barang</a>
+          <a class="nav-link" href="{{ url('/supply') }}">Pasok/Supply Produk</a>
         </li>
       </ul>
     </div>
@@ -90,6 +90,9 @@
       <ul class="nav flex-column sub-menu">
         <li class="nav-item">
           <a class="nav-link" href="{{ url('/report/transaction')  }}">Laporan Transaksi</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="{{ url('/report/product')  }}">Laporan Penjualan</a>
         </li>
         <li class="nav-item">
           <a class="nav-link" href="{{ url('/report/workers') }}">Laporan Pegawai</a>

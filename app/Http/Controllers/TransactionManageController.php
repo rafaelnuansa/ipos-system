@@ -106,10 +106,14 @@ class TransactionManageController extends Controller
         		$transaction->subtotal = $req->subtotal;
         		$transaction->diskon = $req->diskon;
         		$transaction->total = $req->total;
+        		$transaction->modal = $req->modal[$i] * 4 * $req->jumlah_barang[$i];
+        		$transaction->laba = $req->total_barang[$i] - $transaction->modal;
         		$transaction->bayar = $req->bayar;
         		$transaction->kembali = $req->bayar - $req->total;
         		$transaction->id_kasir = Auth::id();
                 $transaction->kasir = Auth::user()->nama;
+                $transaction->manual_transaksi = $req->manual_transaksi;
+                // dd($transaction);
         		$transaction->save();
         	}
 

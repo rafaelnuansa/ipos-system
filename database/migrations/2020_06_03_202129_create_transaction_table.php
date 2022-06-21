@@ -19,15 +19,18 @@ class CreateTransactionTable extends Migration
             $table->string('kode_barang');
             $table->string('nama_barang');
             $table->bigInteger('harga');
-            $table->integer('jumlah');
+            $table->decimal('jumlah', 10,2);
             $table->bigInteger('total_barang');
             $table->bigInteger('subtotal');
             $table->integer('diskon');
             $table->bigInteger('total');
+            $table->bigInteger('modal');
+            $table->bigInteger('laba');
             $table->bigInteger('bayar');
             $table->bigInteger('kembali');
             $table->integer('id_kasir');
             $table->string('kasir');
+            $table->string('manual_transaksi')->nullable();
             $table->timestamps();
         });
     }

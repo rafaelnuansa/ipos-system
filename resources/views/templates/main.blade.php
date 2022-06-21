@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <title>Website POS</title>
+    <title>Womenshoes</title>
 
     <!-- CSS -->
     <link rel="stylesheet" href="{{ asset('assets/vendors/iconfonts/mdi/css/materialdesignicons.min.css') }}">
@@ -16,7 +16,9 @@
     <link rel="stylesheet" href="{{ asset('assets/css/demo_1/style.css') }}">
     <link rel="stylesheet" href="{{ asset('css/main/style.css') }}">
     <link rel="shortcut icon" href="{{ asset('icons/favicon.png') }}"/>
-    <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@300&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     @yield('css')
     <!-- End-CSS -->
 
@@ -27,9 +29,8 @@
       <nav class="navbar default-layout col-lg-12 col-12 p-0 fixed-top d-flex flex-row">
         <div class="text-center navbar-brand-wrapper d-flex align-items-top justify-content-center">
           <a class="navbar-brand brand-logo" href="{{ url('/dashboard') }}">
-            <img src="{{ asset('icons/logo.png') }}" alt="logo" /> </a>
-          <a class="navbar-brand brand-logo-mini" href="{{ url('/dashboard') }}">
-            <img src="{{ asset('icons/logo-mini.png') }}" alt="logo" /> </a>
+           Womenshoes </a>
+          <a class="navbar-brand brand-logo-mini" href="{{ url('/dashboard') }}"><span>W</span></a>
         </div>
         <div class="navbar-menu-wrapper d-flex align-items-center">
           <form class="search-form d-none d-md-block" action="#">
@@ -148,38 +149,20 @@
             $access = \App\Acces::where('user', auth()->user()->id)
             ->first();
             @endphp
-            @if($access->kelola_akun == 1)
-            <li class="nav-item">
-              <a class="nav-link" data-toggle="collapse" href="#kelola_akun" aria-expanded="false" aria-controls="kelola_akun">
-                <span class="menu-title">Kelola Akun</span>
-                <i class="menu-arrow"></i>
-              </a>
-              <div class="collapse" id="kelola_akun">
-                <ul class="nav flex-column sub-menu">
-                  <li class="nav-item">
-                    <a class="nav-link" href="{{ url('/account') }}">Daftar Akun</a>
-                  </li>
-                  <li class="nav-item">
-                    <a class="nav-link" href="{{ url('/access') }}">Hak Akses</a>
-                  </li>
-                </ul>
-              </div>
-            </li>
-            @endif
             @if($access->kelola_barang == 1)
             @if(\App\Supply_system::first()->status == true)
             <li class="nav-item">
               <a class="nav-link" data-toggle="collapse" href="#kelola_barang" aria-expanded="false" aria-controls="kelola_barang">
-                <span class="menu-title">Kelola Barang</span>
+                <span class="menu-title">Manajemen Produk</span>
                 <i class="menu-arrow"></i>
               </a>
               <div class="collapse" id="kelola_barang">
                 <ul class="nav flex-column sub-menu">
                   <li class="nav-item">
-                    <a class="nav-link" href="{{ url('/product') }}">Daftar Barang</a>
+                    <a class="nav-link" href="{{ url('/product') }}">Semua Produk</a>
                   </li>
                   <li class="nav-item">
-                    <a class="nav-link" href="{{ url('/supply') }}">Pasok Barang</a>
+                    <a class="nav-link" href="{{ url('/supply') }}">Pasok/Supply Produk</a>
                   </li>
                 </ul>
               </div>
@@ -192,6 +175,7 @@
             </li>
             @endif
             @endif
+
             @if($access->transaksi == 1)
             <li class="nav-item">
               <a class="nav-link" href="{{ url('/transaction') }}">
@@ -207,11 +191,32 @@
               </a>
               <div class="collapse" id="kelola_laporan">
                 <ul class="nav flex-column sub-menu">
-                  <li class="nav-item">
-                    <a class="nav-link" href="{{ url('/report/transaction')  }}">Laporan Transaksi</a>
-                  </li>
+                    <li class="nav-item">
+                      <a class="nav-link" href="{{ url('/report/transaction')  }}">Laporan Transaksi</a>
+                    </li>
+                    <li class="nav-item">
+                      <a class="nav-link" href="{{ url('/report/product')  }}">Laporan Penjualan</a>
+                    </li>
                   <li class="nav-item">
                     <a class="nav-link" href="{{ url('/report/workers') }}">Laporan Pegawai</a>
+                  </li>
+                </ul>
+              </div>
+            </li>
+            @endif
+            @if($access->kelola_akun == 1)
+            <li class="nav-item">
+              <a class="nav-link" data-toggle="collapse" href="#kelola_akun" aria-expanded="false" aria-controls="kelola_akun">
+                <span class="menu-title">Kelola Akun</span>
+                <i class="menu-arrow"></i>
+              </a>
+              <div class="collapse" id="kelola_akun">
+                <ul class="nav flex-column sub-menu">
+                  <li class="nav-item">
+                    <a class="nav-link" href="{{ url('/account') }}">Daftar Akun</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" href="{{ url('/access') }}">Hak Akses</a>
                   </li>
                 </ul>
               </div>
@@ -284,8 +289,8 @@
           </div>
           <footer class="footer" id="footer-content">
             <div class="container-fluid clearfix">
-              <span class="text-muted d-block text-center text-sm-left d-sm-inline-block">Copyright © 2019 <a href="http://www.bootstrapdash.com/" target="_blank">Bootstrapdash</a>. All rights reserved.</span>
-              <span class="float-none float-sm-right d-block mt-1 mt-sm-0 text-center">Hand-crafted & made with <i class="mdi mdi-heart text-danger"></i>
+              <span class="text-muted d-block text-center text-sm-left d-sm-inline-block">Copyright © 2022. All rights reserved.</span>
+              <span class="float-none float-sm-right d-block mt-1 mt-sm-0 text-center">Hand-crafted & made with <i class="mdi mdi-heart text-danger"></i> , Bogorcloud
               </span>
             </div>
           </footer>

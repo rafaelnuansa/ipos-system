@@ -17,7 +17,7 @@ class CreateSupplyTable extends Migration
             $table->id();
             $table->string('kode_barang');
             $table->string('nama_barang');
-            $table->integer('jumlah');
+            $table->decimal('jumlah', 10,2);
             $table->bigInteger('harga_beli');
             $table->integer('id_pemasok');
             $table->string('pemasok');

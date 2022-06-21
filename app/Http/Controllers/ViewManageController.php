@@ -29,11 +29,11 @@ class ViewManageController extends Controller
         $arr_ammount = count($dates);
         $incomes_data = array();
         if($arr_ammount > 7){
-            for ($i = 0; $i < 7; $i++) { 
-                array_push($incomes_data, $dates[$i]);  
+            for ($i = 0; $i < 7; $i++) {
+                array_push($incomes_data, $dates[$i]);
             }
         }elseif($arr_ammount > 0){
-            for ($i = 0; $i < $arr_ammount; $i++) { 
+            for ($i = 0; $i < $arr_ammount; $i++) {
                 array_push($incomes_data, $dates[$i]);
             }
         }
@@ -77,11 +77,11 @@ class ViewManageController extends Controller
             $arr_ammount = count($dates);
             $incomes_data = array();
             if($arr_ammount > 7){
-                for ($i = 0; $i < 7; $i++) { 
-                    array_push($incomes_data, $dates[$i]);  
+                for ($i = 0; $i < 7; $i++) {
+                    array_push($incomes_data, $dates[$i]);
                 }
             }elseif($arr_ammount > 0){
-                for ($i = 0; $i < $arr_ammount; $i++) { 
+                for ($i = 0; $i < $arr_ammount; $i++) {
                     array_push($incomes_data, $dates[$i]);
                 }
             }
@@ -92,7 +92,7 @@ class ViewManageController extends Controller
             }
 
             return response()->json([
-                'incomes' => $incomes, 
+                'incomes' => $incomes,
                 'total' => $total
             ]);
         }else{
@@ -106,11 +106,11 @@ class ViewManageController extends Controller
             $arr_ammount = count($dates);
             $customer_data = array();
             if($arr_ammount > 7){
-                for ($i = 0; $i < 7; $i++) { 
-                    array_push($customer_data, $dates[$i]);  
+                for ($i = 0; $i < 7; $i++) {
+                    array_push($customer_data, $dates[$i]);
                 }
             }elseif($arr_ammount > 0){
-                for ($i = 0; $i < $arr_ammount; $i++) { 
+                for ($i = 0; $i < $arr_ammount; $i++) {
                     array_push($customer_data, $dates[$i]);
                 }
             }
@@ -121,7 +121,7 @@ class ViewManageController extends Controller
             }
 
             return response()->json([
-                'customers' => $customers, 
+                'customers' => $customers,
                 'jumlah' => $jumlah
             ]);
         }

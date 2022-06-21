@@ -9,7 +9,7 @@
       <div class="quick-link-wrapper d-md-flex flex-md-wrap">
         <ul class="quick-links">
           <li><a href="{{ url('supply') }}">Riwayat Pasok</a></li>
-          <li><a href="{{ url('supply/new') }}">Pasok Barang</a></li>
+          <li><a href="{{ url('supply/new') }}">Pasok/Supply Produk</a></li>
         </ul>
       </div>
     </div>
@@ -67,7 +67,7 @@
     <div class="modal-dialog">
       <div class="modal-content">
 	      <div class="modal-header">
-	        <h5 class="modal-title" id="tableModalLabel">Daftar Barang</h5>
+	        <h5 class="modal-title" id="tableModalLabel">Daftar Produk</h5>
 	        <button type="button" class="close close-btn" data-dismiss="modal" aria-label="Close">
 	          <span aria-hidden="true">&times;</span>
 	        </button>
@@ -136,18 +136,18 @@
 									<div class="form-group row top-min">
 										<label class="col-12 font-weight-bold col-form-label">Jumlah Barang</label>
 										<div class="col-12">
-											<input type="text" class="form-control number-input input-notzero" name="jumlah" placeholder="Masukkan Jumlah">
+											<input type="text" class="form-control" name="jumlah" placeholder="Masukkan Jumlah">
 										</div>
 										<div class="col-12 error-notice" id="jumlah_error"></div>
 									</div>
 									<div class="form-group row top-min">
-										<label class="col-12 font-weight-bold col-form-label">Harga Satuan</label>
+										<label class="col-12 font-weight-bold col-form-label">Harga</label>
 										<div class="col-12">
 											<div class="input-group">
 												<div class="input-group-prepend">
 													<div class="input-group-text">Rp.</div>
 												</div>
-												<input type="text" class="form-control number-input input-notzero" name="harga_beli" placeholder="Masukkan Harga Satuan">
+												<input type="text" class="form-control number-input input-notzero" name="harga_beli" placeholder="Masukkan Harga">
 											</div>
 										</div>
 										<div class="col-12 error-notice" id="harga_beli_error"></div>

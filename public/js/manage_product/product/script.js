@@ -121,16 +121,16 @@ $(function() {
     rules: {
       kode_barang: "required",
       nama_barang: "required",
-      jenis_barang: "required",
-      stok: "required",
+      // jenis_barang: "required",
+      // stok: "required",
+      modal: "required",
       harga: "required"
     },
     messages: {
-      kode_barang: "Kode barang tidak boleh kosong",
-      nama_barang: "Nama barang tidak boleh kosong",
-      jenis_barang: "Silakan pilih jenis barang",
-      stok: "Stok barang tidak boleh kosong",
-      harga: "Harga barang tidak boleh kosong"
+      kode_barang: "Kode Produk tidak boleh kosong",
+      nama_barang: "Nama Produk tidak boleh kosong",
+      modal: "Modal produk tidak boleh kosong",
+      harga: "Harga produk tidak boleh kosong"
     },
     errorPlacement: function(error, element) {
         var name = element.attr("name");
@@ -146,15 +146,15 @@ var validator = $("form[name='update_form']").validate({
   rules: {
     kode_barang: "required",
     nama_barang: "required",
-    jenis_barang: "required",
     stok: "required",
+    modal: "required",
     harga: "required"
   },
   messages: {
-    kode_barang: "Kode barang tidak boleh kosong",
-    nama_barang: "Nama barang tidak boleh kosong",
-    jenis_barang: "Silakan pilih jenis barang",
-    stok: "Stok barang tidak boleh kosong",
+    kode_barang: "Kode produk tidak boleh kosong",
+    nama_barang: "Nama produk tidak boleh kosong",
+    stok: "Stok produk tidak boleh kosong",
+    modal: "Modal produk tidak boleh kosong",
     harga: "Harga barang tidak boleh kosong"
   },
   errorPlacement: function(error, element) {

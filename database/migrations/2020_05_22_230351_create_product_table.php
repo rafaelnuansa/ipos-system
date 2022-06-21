@@ -16,11 +16,9 @@ class CreateProductTable extends Migration
         Schema::create('products', function (Blueprint $table) {
             $table->id();
             $table->string('kode_barang');
-            $table->string('jenis_barang');
             $table->string('nama_barang');
-            $table->string('berat_barang')->nullable();
-            $table->string('merek')->nullable();
-            $table->integer('stok')->default(15);
+            $table->decimal('stok', 10,2)->default(0);
+            $table->bigInteger('modal');
             $table->bigInteger('harga');
             $table->string('keterangan')->default('Tersedia');
             $table->timestamps();

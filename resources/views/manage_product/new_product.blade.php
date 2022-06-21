@@ -75,10 +75,10 @@
 				<form action="{{ url('/product/create') }}" method="post" name="create_form">
 					@csrf
 					<div class="form-group row">
-			  			<label class="col-12 font-weight-bold col-form-label">Kode Barang <span class="text-danger">*</span></label>
+			  			<label class="col-12 font-weight-bold col-form-label">Kode Produk <span class="text-danger">*</span></label>
 					  	<div class="col-12">
 					  		<div class="input-group">
-					  			<input type="text" class="form-control number-input" name="kode_barang" placeholder="Masukkan Kode Barang">
+					  			<input type="text" class="form-control" name="kode_barang" placeholder="Masukkan Kode Barang">
 					  			<div class="inpu-group-prepend">
 					  				<button class="btn btn-inverse-primary btn-sm btn-scan shadow-sm ml-2" type="button" data-toggle="modal" data-target="#scanModal"><i class="mdi mdi-crop-free"></i></button>
 					  			</div>
@@ -87,74 +87,46 @@
 						<div class="col-12 error-notice" id="kode_barang_error"></div>
 					</div>
 					<div class="form-group row">
-					  	<div class="col-lg-6 col-md-6 col-sm-12 space-bottom">
+					  	<div class="col-lg-12 col-md-12 col-sm-12 space-bottom">
 					  		<div class="row">
-					  			<label class="col-12 font-weight-bold col-form-label">Nama Barang <span class="text-danger">*</span></label>
+					  			<label class="col-12 font-weight-bold col-form-label">Nama Produk <span class="text-danger">*</span></label>
 							  	<div class="col-12">
 							  		<input type="text" class="form-control" name="nama_barang" placeholder="Masukkan Nama Barang">
 							  	</div>
 								<div class="col-12 error-notice" id="nama_barang_error"></div>
 					  		</div>
 					  	</div>
-					  	<div class="col-lg-6 col-md-6 col-sm-12">
-					  		<div class="row">
-					  			<label class="col-12 font-weight-bold col-form-label">Jenis Barang <span class="text-danger">*</span></label>
-							  	<div class="col-12">
-							  		<select class="form-control" name="jenis_barang">
-							  			<option value="">-- Pilih Jenis Barang --</option>
-							  			<option value="Produksi">Produksi</option>
-							  			<option value="Konsumsi">Konsumsi</option>
-							  		</select>
-							  	</div>
-								<div class="col-12 error-notice" id="jenis_barang_error"></div>
-					  		</div>
-					  	</div>
-					</div>
-					<div class="form-group row">
-					  	<div class="col-lg-6 col-md-6 col-sm-12 space-bottom">
-					  		<div class="row">
-					  			<label class="col-12 font-weight-bold col-form-label">Berat Barang</label>
-							  	<div class="col-12">
-							  		<div class="input-group">
-							  			<input type="text" class="form-control number-input" name="berat_barang" placeholder="Masukkan Berat Barang">
-							  			<div class="input-group-append">
-							  				<select class="form-control" name="satuan_berat">
-							  					<option value="kg">Kilogram</option>
-							  					<option value="g">Gram</option>
-							  					<option value="ml">Miligram</option>
-							  					<option value="oz">Ons</option>
-							  					<option value="l">Liter</option>
-							  					<option value="ml">Mililiter</option>
-							  				</select>
-							  			</div>
-							  		</div>
-							  	</div>
-					  		</div>
-					  	</div>
-					  	<div class="col-lg-6 col-md-6 col-sm-12">
-					  		<div class="row">
-					  			<label class="col-12 font-weight-bold col-form-label">Merek Barang</label>
-							  	<div class="col-12">
-							  		<input type="text" class="form-control" name="merek" placeholder="Masukkan Merek Barang">
-							  	</div>
-					  		</div>
-					  	</div>
 					</div>
 					<div class="form-group row">
 						@if($supply_system->status == true)
-					  	<div class="col-lg-6 col-md-6 col-sm-12 space-bottom">
+					  	<div class="col-lg-12 col-md-12 col-sm-12 space-bottom">
 					  		<div class="row">
 					  			<label class="col-12 font-weight-bold col-form-label">Stok Barang <span class="text-danger">*</span></label>
 							  	<div class="col-12">
-							  		<input type="text" class="form-control number-input" name="stok" placeholder="Masukkan Stok Barang">
+							  		<input type="text" class="form-control" name="stok" placeholder="Masukkan Stok Barang">
 							  	</div>
 								<div class="col-12 error-notice" id="stok_error"></div>
 					  		</div>
 					  	</div>
 					  	@endif
+						
 					  	<div class="col-lg-6 col-md-6 col-sm-12">
 					  		<div class="row">
-					  			<label class="col-12 font-weight-bold col-form-label">Harga Barang <span class="text-danger">*</span></label>
+					  			<label class="col-12 font-weight-bold col-form-label">Harga Modal <span class="text-danger">*</span></label>
+							  	<div class="col-12">
+							  		<div class="input-group">
+							  			<div class="input-group-prepend">
+							  				<span class="input-group-text">Rp. </span>
+							  			</div>
+							  			<input type="text" class="form-control number-input" name="modal" placeholder="Masukkan Modal Produk">
+							  		</div>
+							  	</div>
+								<div class="col-12 error-notice" id="modal_error"></div>
+					  		</div>
+					  	</div>
+					  	<div class="col-lg-6 col-md-6 col-sm-12">
+					  		<div class="row">
+					  			<label class="col-12 font-weight-bold col-form-label">Harga Produk <span class="text-danger">*</span></label>
 							  	<div class="col-12">
 							  		<div class="input-group">
 							  			<div class="input-group-prepend">

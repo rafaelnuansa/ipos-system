@@ -58,7 +58,7 @@
             <div class="col-12">
               <div class="form-group">
                 <input type="text" class="form-control" name="search" placeholder="Cari barang">
-              </div>  
+              </div>
             </div>
             <div class="col-12">
               <ul class="list-group product-list">
@@ -69,6 +69,7 @@
                   <div class="text-group">
                     <p class="m-0">{{ $product->kode_barang }}</p>
                     <p class="m-0 txt-light">{{ $product->nama_barang }}</p>
+                    <p class="m-0 txt-light">{{ $product->modal }}</p>
                   </div>
                   <div class="d-flex align-items-center">
                     <span class="ammount-box bg-secondary mr-1"><i class="mdi mdi-cube-outline"></i></span>
@@ -82,6 +83,7 @@
                   <div class="text-group">
                     <p class="m-0">{{ $product->kode_barang }}</p>
                     <p class="m-0 txt-light">{{ $product->nama_barang }}</p>
+                    <p class="m-0 txt-light">{{ $product->modal }}</p>
                   </div>
                   <div class="d-flex align-items-center">
                     <span class="ammount-box bg-green mr-1"><i class="mdi mdi-coin"></i></span>
@@ -176,9 +178,9 @@
                       <i class="mdi mdi-swap-horizontal"></i>
                     </div>
                     <div class="transaction-code ml-3">
-                      <p class="m-0 text-white">Kode Transaksi</p>
-                      <p class="m-0 text-white">T{{ date('dmYHis') }}</p>
-                      <input type="text" name="kode_transaksi" value="T{{ date('dmYHis') }}" hidden="">
+                      <p class="m-0 text-white">Kode Transaksi (Otomatis)</p>
+                      <p class="m-0 text-white">WS{{ date('dmYHis') }}</p>
+                      <input type="text" name="kode_transaksi" value="WS{{ date('dmYHis') }}" hidden="">
                     </div>
                   </div>
                   <div class="btn-group mt-h">
@@ -220,7 +222,7 @@
           <div class="row">
             <div class="col-12 payment-1">
               <table class="table-payment-1">
-                <tr>
+
                   <td class="text-left">Tanggal</td>
                   <td class="text-right">{{ date('d M, Y') }}</td>
                 </tr>
@@ -236,6 +238,15 @@
             </div>
             <div class="col-12 mt-4">
               <table class="table-payment-2">
+
+                <tr>
+                    <td>
+                      <div class="input-group">
+                        <input type="text" class="form-control w-100" name="manual_transaksi" placeholder="Transaksi Kode Manual">
+                      </div>
+                    </td>
+                  </tr>
+                <tr>
                 <tr>
                   <td class="text-left">
                     <span class="subtotal-td">Subtotal</span>
@@ -253,7 +264,6 @@
                   <td class="text-right d-flex justify-content-end align-items-center pt-2">
                     <input type="number" class="form-control diskon-input mr-2" min="0" max="100" name="diskon" value="0" hidden="">
                     <span class="nilai-diskon-td mr-1">0</span>
-                    <span>%</span>
                   </td>
                 </tr>
                 <tr>
@@ -309,7 +319,7 @@ $(document).on('click', '.btn-pilih', function(e){
     success:function(response){
       var check = $('.kode-barang-td:contains('+ response.product.kode_barang +')').length;
       if(check == 0){
-        tambahData(response.product.kode_barang, response.product.nama_barang, response.product.harga, response.product.stok, response.status);
+        tambahData(response.product.kode_barang, response.product.nama_barang, response.product.harga, response.product.stok, response.product.modal, response.status);
       }else{
         swal(
             "",
@@ -380,8 +390,8 @@ $(document).on('click', '.btn-continue', function(e){
       var check = $('.kode-barang-td:contains('+ response.product.kode_barang +')').length;
       if(response.check == 'tersedia'){
         if(check == 0){
-          tambahData(response.product.kode_barang, response.product.nama_barang, response.product.harga, response.product.stok, response.status);
-          $('.close-btn').click();  
+          tambahData(response.product.kode_barang, response.product.nama_barang, response.product.harga, response.product.stok, response.product.modal, response.status);
+          $('.close-btn').click();
         }else{
           swal(
               "",
@@ -399,7 +409,7 @@ $(document).on('click', '.btn-continue', function(e){
 $(document).on('click', '.btn-bayar', function(){
   var total = parseInt($('.nilai-total2-td').val());
   var bayar = parseInt($('.bayar-input').val());
-  var check_barang = parseInt($('.jumlah_barang_text').length);
+  var check_barang = parseFloat($('.jumlah_barang_text').length);
   if(bayar >= total){
     $('.nominal-error').prop('hidden', true);
     if(check_barang != 0){
@@ -421,7 +431,7 @@ $(document).on('click', '.btn-bayar', function(){
     }else{
       $('.nominal-error').prop('hidden', false);
     }
-    
+
     if(check_barang == 0){
       swal(
           "",

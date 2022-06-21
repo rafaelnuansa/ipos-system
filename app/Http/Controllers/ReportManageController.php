@@ -28,15 +28,15 @@ class ReportManageController extends Controller
             }
             $dates = array_unique($array);
             rsort($dates);
-
+            // $get_product = Product::where();
             $arr_ammount = count($dates);
             $incomes_data = array();
             if($arr_ammount > 7){
-            	for ($i = 0; $i < 7; $i++) { 
-            		array_push($incomes_data, $dates[$i]);	
+            	for ($i = 0; $i < 7; $i++) {
+            		array_push($incomes_data, $dates[$i]);
             	}
             }elseif($arr_ammount > 0){
-            	for ($i = 0; $i < $arr_ammount; $i++) { 
+            	for ($i = 0; $i < $arr_ammount; $i++) {
             		array_push($incomes_data, $dates[$i]);
             	}
             }
@@ -63,6 +63,42 @@ class ReportManageController extends Controller
         }
     }
 
+    // Show View Report Product
+    public function reportProduct()
+    {
+        $id_account = Auth::id();
+        $check_access = Acces::where('user', $id_account)
+        ->first();
+        if($check_access->kelola_laporan == 1){
+        	// $transactions = Transaction::all();
+            $transactions = \App\Transaction::paginate(10);
+            $jumlah = \App\Transaction::paginate(10)->sum('jumlah');
+            $sub_total = Transaction::paginate(10)->sum('subtotal');
+            $total_modal = Transaction::paginate(10)->sum('modal');
+            $total_laba = Transaction::paginate(10)->sum('laba');
+            // dd($transactions);
+            $array = array();
+            $dates = array_unique($array);
+            rsort($dates);
+
+            $arr_ammount = count($dates);
+            $incomes_data = array();
+            if($arr_ammount > 7){
+            	for ($i = 0; $i < 7; $i++) {
+            		array_push($incomes_data, $dates[$i]);
+            	}
+            }elseif($arr_ammount > 0){
+            	for ($i = 0; $i < $arr_ammount; $i++) {
+            		array_push($incomes_data, $dates[$i]);
+            	}
+            }
+            $incomes = array_reverse($incomes_data);
+
+        	return view('report.report_product', compact('transactions', 'jumlah', 'sub_total','total_modal', 'total_laba'));
+        }else{
+            return back();
+        }
+    }
     // Filter Report Transaction
     public function filterTransaction(Request $req)
     {
@@ -99,13 +135,46 @@ class ReportManageController extends Controller
         if($check_access->kelola_laporan == 1){
             $users = User::orderBy($id, 'asc')
             ->get();
-            
+
             return view('report.filter_table.filter_table_worker', compact('users'));
         }else{
             return back();
         }
     }
 
+    // Filter Report Transaction
+    public function filterProduct(Request $req)
+    {
+        $id_account = Auth::id();
+        $check_access = Acces::where('user', $id_account)
+        ->first();
+        if($check_access->kelola_laporan == 1){
+        	$start_date = $req->tgl_awal;
+        	$end_date = $req->tgl_akhir;
+        	$start_date2 = $start_date[6].$start_date[7].$start_date[8].$start_date[9].'-'.$start_date[3].$start_date[4].'-'.$start_date[0].$start_date[1].' 00:00:00';
+        	$end_date2 = $end_date[6].$end_date[7].$end_date[8].$end_date[9].'-'.$end_date[3].$end_date[4].'-'.$end_date[0].$end_date[1].' 23:59:59';
+        	$supplies = Transaction::select()
+        	->whereBetween('created_at', array($start_date2, $end_date2))
+        	->latest();
+
+            $transactions = \App\Transaction::whereBetween('created_at', array($start_date2, $end_date2))
+        	->latest()->get();
+            $jumlah = \App\Transaction::whereBetween('created_at', array($start_date2, $end_date2))->latest()->sum('jumlah');
+            $sub_total = Transaction::whereBetween('created_at', array($start_date2, $end_date2))->latest()->sum('subtotal');
+            $total_modal = Transaction::whereBetween('created_at', array($start_date2, $end_date2))->latest()->sum('modal');
+            $total_laba = Transaction::whereBetween('created_at', array($start_date2, $end_date2))->latest()->sum('laba');
+            $array = array();
+            foreach ($supplies as $no => $supply) {
+                array_push($array, $supplies[$no]->created_at->toDateString());
+            }
+            $dates = array_unique($array);
+            rsort($dates);
+
+        	return view('report.report_product_filter', compact('transactions', 'jumlah', 'sub_total', 'total_laba', 'total_modal'));
+        }else{
+            return back();
+        }
+    }
     // Filter Chart Transaction
     public function chartTransaction($id)
     {
@@ -114,10 +183,12 @@ class ReportManageController extends Controller
         ->first();
         if($check_access->kelola_laporan == 1){
         	$supplies = Transaction::all();
+
             $array = array();
             foreach ($supplies as $no => $supply) {
                 array_push($array, $supplies[$no]->created_at->toDateString());
             }
+
             $dates = array_unique($array);
             rsort($dates);
             $arr_ammount = count($dates);
@@ -125,62 +196,70 @@ class ReportManageController extends Controller
 
         	if($id == 'minggu'){
         		if($arr_ammount > 7){
-    	        	for ($i = 0; $i < 7; $i++) { 
-    	        		array_push($incomes_data, $dates[$i]);	
+    	        	for ($i = 0; $i < 7; $i++) {
+    	        		array_push($incomes_data, $dates[$i]);
     	        	}
     	        }elseif($arr_ammount > 0){
-    	        	for ($i = 0; $i < $arr_ammount; $i++) { 
+    	        	for ($i = 0; $i < $arr_ammount; $i++) {
     	        		array_push($incomes_data, $dates[$i]);
     	        	}
     	        }
     	        $incomes = array_reverse($incomes_data);
     	        $total = array();
     	        foreach ($incomes as $no => $income) {
-    	        	array_push($total, Transaction::whereDate('created_at', $income)->sum('total'));
+    	        	array_push($total, Transaction::whereDate('created_at', $income)
+                    // ->distinct()
+                    ->sum('total'));
+
     	        }
 
+
     	        return response()->json([
-    	        	'incomes' => $incomes, 
+    	        	'incomes' => $incomes,
     	        	'total' => $total
     	        ]);
         	}elseif($id == 'bulan'){
         		if($arr_ammount > 30){
-    	        	for ($i = 0; $i < 30; $i++) { 
-    	        		array_push($incomes_data, $dates[$i]);	
+    	        	for ($i = 0; $i < 30; $i++) {
+    	        		array_push($incomes_data, $dates[$i]);
     	        	}
     	        }elseif($arr_ammount > 0){
-    	        	for ($i = 0; $i < $arr_ammount; $i++) { 
+    	        	for ($i = 0; $i < $arr_ammount; $i++) {
     	        		array_push($incomes_data, $dates[$i]);
     	        	}
     	        }
     	        $incomes = array_reverse($incomes_data);
     	        $total = array();
     	        foreach ($incomes as $no => $income) {
-    	        	array_push($total, Transaction::whereDate('created_at', $income)->sum('total'));
+    	        	array_push($total, Transaction::whereDate('created_at', $income)
+                    // ->distinct()
+                    ->sum('total'));
     	        }
 
     	        return response()->json([
-    	        	'incomes' => $incomes, 
+    	        	'incomes' => $incomes,
     	        	'total' => $total
     	        ]);
         	}elseif($id == 'tahun'){
         		if($arr_ammount > 365){
-    	        	for ($i = 0; $i < 365; $i++) { 
-    	        		array_push($incomes_data, $dates[$i]);	
+    	        	for ($i = 0; $i < 365; $i++) {
+    	        		array_push($incomes_data, $dates[$i]);
     	        	}
     	        }elseif($arr_ammount > 0){
-    	        	for ($i = 0; $i < $arr_ammount; $i++) { 
+    	        	for ($i = 0; $i < $arr_ammount; $i++) {
     	        		array_push($incomes_data, $dates[$i]);
     	        	}
     	        }
     	        $incomes = array_reverse($incomes_data);
     	        $total = array();
     	        foreach ($incomes as $no => $income) {
-    	        	array_push($total, Transaction::whereDate('created_at', $income)->sum('total'));
+    	        	array_push($total, Transaction::whereDate('created_at', $income)
+                    // ->distinct()
+                    ->sum('total'));
     	        }
 
     	        return response()->json([
-    	        	'incomes' => $incomes, 
+    	        	'incomes' => $incomes,
     	        	'total' => $total
     	        ]);
         	}
@@ -291,8 +370,104 @@ class ReportManageController extends Controller
                 $tgl_akhir = $end_date2;
             }
             $market = Market::first();
-
             $pdf = PDF::loadview('report.export_report_transaction', compact('dates', 'tgl_awal', 'tgl_akhir', 'market'));
+
+            return $pdf->stream();
+        }else{
+            return back();
+        }
+    }
+
+    public function exportProduct(Request $req)
+    {
+        $id_account = Auth::id();
+        $check_access = Acces::where('user', $id_account)
+        ->first();
+        if($check_access->kelola_laporan == 1){
+            $jenis_laporan = $req->jns_laporan;
+            $current_time = Carbon::now()->isoFormat('Y-MM-DD') . ' 23:59:59';
+            if($jenis_laporan == 'period'){
+                if($req->period == 'minggu'){
+                    $last_time = Carbon::now()->subWeeks($req->time)->isoFormat('Y-MM-DD') . ' 00:00:00';
+                    $transactions = Transaction::select('transactions.*')
+                    ->whereBetween('created_at', array($last_time, $current_time))
+                    ->get();
+                    // $transactions = \App\Transaction::whereBetween('created_at', array($last_time, $current_time))
+                    // ->latest()->get();
+                    $jumlah = \App\Transaction::whereBetween('created_at', array($last_time, $current_time))->latest()->sum('jumlah');
+                    $total_barang = Transaction::whereBetween('created_at', array($last_time, $current_time))->sum('total_barang');
+                    $total_modal = Transaction::whereBetween('created_at', array($last_time, $current_time))->latest()->sum('modal');
+                    $total_laba = Transaction::whereBetween('created_at', array($last_time, $current_time))->latest()->sum('laba');
+                    $array = array();
+                    foreach ($transactions as $no => $transaction) {
+                        array_push($array, $transactions[$no]->created_at->toDateString());
+                    }
+                    $dates = array_unique($array);
+                    rsort($dates);
+                    $tgl_awal = $last_time;
+                    $tgl_akhir = $current_time;
+                }elseif($req->period == 'bulan'){
+                    $last_time = Carbon::now()->subMonths($req->time)->isoFormat('Y-MM-DD') . ' 00:00:00';
+                    $transactions = Transaction::select('transactions.*')
+                    ->whereBetween('created_at', array($last_time, $current_time))
+                    ->get();
+                    $jumlah = \App\Transaction::whereBetween('created_at', array($last_time, $current_time))->latest()->sum('jumlah');
+                    $total_barang = Transaction::whereBetween('created_at', array($last_time, $current_time))->sum('total_barang');
+                    $total_modal = Transaction::whereBetween('created_at', array($last_time, $current_time))->latest()->sum('modal');
+                    $total_laba = Transaction::whereBetween('created_at', array($last_time, $current_time))->latest()->sum('laba');
+
+                    $array = array();
+                    foreach ($transactions as $no => $transaction) {
+                        array_push($array, $transactions[$no]->created_at->toDateString());
+                    }
+                    $dates = array_unique($array);
+                    rsort($dates);
+                    $tgl_awal = $last_time;
+                    $tgl_akhir = $current_time;
+                }elseif($req->period == 'tahun'){
+                    $last_time = Carbon::now()->subYears($req->time)->isoFormat('Y-MM-DD') . ' 00:00:00';
+                    $transactions = Transaction::select('transactions.*')
+                    ->whereBetween('created_at', array($last_time, $current_time))
+                    ->get();
+                    $jumlah = \App\Transaction::whereBetween('created_at', array($last_time, $current_time))->latest()->sum('jumlah');
+                    $total_barang = Transaction::whereBetween('created_at', array($last_time, $current_time))->latest()->sum('total_barang');
+                    $total_modal = Transaction::whereBetween('created_at', array($last_time, $current_time))->latest()->sum('modal');
+                    $total_laba = Transaction::whereBetween('created_at', array($last_time, $current_time))->latest()->sum('laba');
+
+                    $array = array();
+                    foreach ($transactions as $no => $transaction) {
+                        array_push($array, $transactions[$no]->created_at->toDateString());
+                    }
+                    $dates = array_unique($array);
+                    rsort($dates);
+                    $tgl_awal = $last_time;
+                    $tgl_akhir = $current_time;
+                }
+            }else{
+                $start_date = $req->tgl_awal_export;
+                $end_date = $req->tgl_akhir_export;
+                $start_date2 = $start_date[6].$start_date[7].$start_date[8].$start_date[9].'-'.$start_date[3].$start_date[4].'-'.$start_date[0].$start_date[1].' 00:00:00';
+                $end_date2 = $end_date[6].$end_date[7].$end_date[8].$end_date[9].'-'.$end_date[3].$end_date[4].'-'.$end_date[0].$end_date[1].' 23:59:59';
+                $transactions = Transaction::select('transactions.*')
+                ->whereBetween('created_at', array($start_date2, $end_date2))
+                ->get();
+                $jumlah = \App\Transaction::whereBetween('created_at', array($start_date2, $end_date2))->latest()->sum('jumlah');
+                $total_barang = Transaction::whereBetween('created_at', array($start_date2, $end_date2))->sum('total_barang');
+                $total_modal = Transaction::whereBetween('created_at', array($start_date2, $end_date2))->latest()->sum('modal');
+                $total_laba = Transaction::whereBetween('created_at', array($start_date2, $end_date2))->latest()->sum('laba');
+
+                $array = array();
+                foreach ($transactions as $no => $transaction) {
+                    array_push($array, $transactions[$no]->created_at->toDateString());
+                }
+                $dates = array_unique($array);
+                rsort($dates);
+                $tgl_awal = $start_date2;
+                $tgl_akhir = $end_date2;
+            }
+            $market = Market::first();
+            $pdf = PDF::loadview('report.export_report_product', compact('transactions','total_barang', 'total_modal', 'total_laba', 'tgl_awal', 'tgl_akhir', 'market'));
+
             return $pdf->stream();
         }else{
             return back();
